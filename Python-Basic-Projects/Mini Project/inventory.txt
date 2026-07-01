@@ -1,3 +1,0 @@
-P101,Notebook,Stationery,50.0,20
-P102,Pen,Stationery,10.0,50
-P103,Pencil,Stationery,10.0,70
