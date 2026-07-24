@@ -1,4 +1,5 @@
 # app_diabetes.py
+import os
 import joblib
 import pandas as pd
 import streamlit as st
@@ -10,18 +11,25 @@ st.title("🩸 Diabetes Risk Prediction App")
 st.write("Enter patient metrics below to evaluate diabetes risk.")
 st.markdown("---")
 
-# 2. Load Model Artifacts
+# 2. Get current script directory to construct absolute file paths safely
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+model_path = os.path.join(BASE_DIR, "diabetes_model.pkl")
+scaler_path = os.path.join(BASE_DIR, "diabetes_scaler.pkl")
+columns_path = os.path.join(BASE_DIR, "diabetes_columns.pkl")
+
+# Load Model Artifacts
 try:
-    model = joblib.load("diabetes_model.pkl")
-    scaler = joblib.load("diabetes_scaler.pkl")
-    columns = joblib.load("diabetes_columns.pkl")
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
+    columns = joblib.load(columns_path)
     loaded = True
 except FileNotFoundError:
-    st.error("❌ Model files not found! Please run the training script first.")
+    st.error("❌ Model files not found! Please ensure .pkl files exist in the app directory.")
     loaded = False
 
 if loaded:
-    # 3. Input Layout (Includes Pregnancies)
+    # 3. Input Layout
     col1, col2 = st.columns(2)
 
     with col1:
@@ -61,7 +69,6 @@ if loaded:
 
     # 4. Predict Button
     if st.button("Predict Diabetes Risk", type="primary"):
-        # Create input DataFrame with all 8 features matching the scaler
         input_data = pd.DataFrame(
             [
                 {
