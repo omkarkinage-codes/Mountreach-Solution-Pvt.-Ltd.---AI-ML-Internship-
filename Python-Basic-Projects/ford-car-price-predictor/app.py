@@ -1,3 +1,4 @@
+from pathlib import Path
 import joblib
 import pandas as pd
 import streamlit as st
@@ -55,16 +56,25 @@ st.markdown("""
 # ------------------------------------------------------------
 # LOAD MODEL
 # ------------------------------------------------------------
+
+BASE_DIR = Path(__file__).resolve().parent
+
+
 @st.cache_resource
 def load_model():
-    model = joblib.load("LR_ford_car.pkl")
-    scaler = joblib.load("scaler.pkl")
-    columns = joblib.load("columns.pkl")
+
+    model = joblib.load(BASE_DIR / "LR_ford_car.pkl")
+    scaler = joblib.load(BASE_DIR / "scaler.pkl")
+    columns = joblib.load(BASE_DIR / "columns.pkl")
+
     return model, scaler, columns
+
 
 @st.cache_data
 def load_options():
-    df = pd.read_csv("ford_car_dataset.csv")
+
+    df = pd.read_csv(BASE_DIR / "ford_car_dataset.csv")
+
     return (
         sorted(df["model"].dropna().unique()),
         sorted(df["transmission"].dropna().unique()),
@@ -75,11 +85,16 @@ try:
     model, scaler, columns = load_model()
     models, transmissions, fuels = load_options()
 
-except FileNotFoundError:
-    st.error(
-        "Required files are missing. Make sure these files are "
-        "in the same folder as app.py:"
-    )
+except FileNotFoundError as e:
+
+    st.error("❌ A required file could not be found.")
+
+    st.code(str(e))
+
+    st.write("Files expected in:")
+
+    st.code(str(BASE_DIR))
+
     st.code(
         "app.py\n"
         "ford_car_dataset.csv\n"
