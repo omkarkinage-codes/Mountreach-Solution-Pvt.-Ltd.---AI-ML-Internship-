@@ -70,7 +70,7 @@ ford-car-price-predictor/
 
 ~~~bash
 git clone YOUR_GITHUB_REPOSITORY_URL
-cd ML_Model_1
+cd ford-car-price-predictor
 ~~~
 
 ### 2. Install dependencies
