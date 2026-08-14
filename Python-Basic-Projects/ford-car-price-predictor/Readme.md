@@ -49,7 +49,7 @@ Streamlit Web App
 ## 📁 Project Structure
 
 ~~~text
-ML_Model_1/
+ford-car-price-predictor/
 │
 ├── app.py
 ├── ford_car_dataset.csv
